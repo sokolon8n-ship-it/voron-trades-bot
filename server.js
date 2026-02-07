@@ -1,4 +1,8 @@
-require('dotenv').config();
+// Завантажуємо dotenv тільки локально (не на Railway)
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require('express');
 const cors = require('cors');
 const TelegramBot = require('node-telegram-bot-api');
@@ -12,7 +16,9 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID;
 
 if (!TELEGRAM_BOT_TOKEN || !ADMIN_CHAT_ID) {
-  console.error('❌ ERROR: Missing TELEGRAM_BOT_TOKEN or ADMIN_CHAT_ID in .env file');
+  console.error('❌ ERROR: Missing TELEGRAM_BOT_TOKEN or ADMIN_CHAT_ID');
+  console.error('TELEGRAM_BOT_TOKEN:', TELEGRAM_BOT_TOKEN ? 'SET' : 'NOT SET');
+  console.error('ADMIN_CHAT_ID:', ADMIN_CHAT_ID ? 'SET' : 'NOT SET');
   process.exit(1);
 }
 
@@ -113,3 +119,4 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🤖 Telegram bot started`);
 });
+
