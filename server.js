@@ -22,7 +22,21 @@ if (!TELEGRAM_BOT_TOKEN || !ADMIN_CHAT_ID) {
   process.exit(1);
 }
 
-const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, {   polling: {    interval: 1000,    autoStart: true,    params: {      timeout: 10    }  }});
+const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { 
+  polling: {
+    interval: 1000,
+    autoStart: true,
+    params: {
+      timeout: 10
+    }
+  }
+});
+
+// Обробка помилок polling
+bot.on('polling_error', (error) => {
+  console.error('Polling error:', error.code, error.message);
+  // Не падати при помилці
+});
 
 // Зберігання активних чатів
 const activeChats = new Map();
