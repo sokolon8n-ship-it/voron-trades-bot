@@ -24,6 +24,7 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID;
 const MAKE_WEBHOOK_URL = process.env.MAKE_WEBHOOK_URL;
 const MAKE_WEBHOOK_SECRET = process.env.MAKE_WEBHOOK_SECRET;
+const MAKE_WEBHOOK_APIKEY = process.env.MAKE_WEBHOOK_APIKEY;
 
 if (!TELEGRAM_BOT_TOKEN || !ADMIN_CHAT_ID) {
   console.error('❌ ERROR: Missing TELEGRAM_BOT_TOKEN or ADMIN_CHAT_ID');
@@ -84,6 +85,7 @@ async function notifyMake(payload) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...(MAKE_WEBHOOK_APIKEY ? { 'x-make-apikey': MAKE_WEBHOOK_APIKEY, 'x-make-api-key': MAKE_WEBHOOK_APIKEY } : {}),
         ...(MAKE_WEBHOOK_SECRET ? { 'x-make-signature': makeSignature(raw) } : {})
       },
       body: raw
