@@ -75,7 +75,12 @@ async function notifyMake(payload) {
   if (!MAKE_WEBHOOK_URL) return;
   try {
     const raw = JSON.stringify(payload);
-    await fetch(MAKE_WEBHOOK_URL, {
+    console.log('➡️ MAKE webhook: sending', {
+      type: payload?.type,
+      sessionId: payload?.sessionId,
+      url: MAKE_WEBHOOK_URL ? '[set]' : '[missing]'
+    });
+    const r = await fetch(MAKE_WEBHOOK_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,6 +88,7 @@ async function notifyMake(payload) {
       },
       body: raw
     });
+    console.log('✅ MAKE webhook: delivered', { status: r.status });
   } catch (e) {
     console.error('⚠️ MAKE webhook failed:', e?.message || e);
   }
